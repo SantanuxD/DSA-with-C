@@ -1,3 +1,5 @@
+//Write down the algorithm to multiply two polynomials of two variables.
+
 #include<stdio.h>
 void main()
 {
