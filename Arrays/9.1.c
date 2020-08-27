@@ -1,3 +1,5 @@
+//Design an efficient data structure to store data for lower and upper triangular matrix.
+
 #include<stdio.h>
 void main()
 {
