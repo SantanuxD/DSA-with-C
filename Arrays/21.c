@@ -1,3 +1,6 @@
+// Write an algorithm that takes as input the size of the array and the elements in the array and find the median of the elements in the array.
+
+
 #include <stdio.h>
 
 void swap(int *p,int *q) {
