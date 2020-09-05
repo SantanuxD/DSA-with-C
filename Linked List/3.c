@@ -1,4 +1,4 @@
-//Design algorithm/develop pseudocode/write C code to delete the 1-st node from the list.
+//Design algorithm/develop pseudocode/write C code to delete the 1st node from the list.
 
 #include <stdio.h>
 #include <stdlib.h>
