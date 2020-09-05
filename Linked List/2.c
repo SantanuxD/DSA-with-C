@@ -1,3 +1,5 @@
+//Design algorithm/develop pseudocode/write C code to deletes the last node from the LIST
+
 #include <stdio.h>
 #include <stdlib.h>
 
