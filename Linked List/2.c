@@ -1,117 +1,151 @@
-//Design algorithm/develop pseudocode/write C code to deletes the last node from the LIST
+#include<stdio.h>
+#include<stdlib.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-
-struct node 
+struct node
 {
-    int num;                    
-    struct node *nextptr;       
-}*stnode;
+    int coef,expo;
+    struct node* next;
+};
 
-void createNodeList(int n);     
-void LastNodeDeletion();	    
-void displayList();             
+struct node* insertpoly(struct node* thead,int c,int e);
+struct node* append(struct node* thead,int c,int e);
+struct node* polyaddition(struct node* p1thead,struct node* p2thead);
+void display(struct node* thead);
 
-int main()
+void main()
 {
-    int n,num,pos;
-	
-    printf(" Input the number of nodes : ");
-    scanf("%d", &n);
-    createNodeList(n);
+    int a,b,n,i;
+    struct node* p1head,* p2head,* p3head;
+    p1head=p2head=NULL;
 
-    printf("\n Data entered in the list are : \n");		
-    displayList();
-    LastNodeDeletion();
-	    printf("\n The new list after deletion the last node are  : \n");	
-    displayList();
-    return 0;
+    
+
+    printf("Enter the no of terms of polynomial 1..");
+    scanf("%d",&n);
+    printf("\nEnter the polynomial..");
+    for(i=0;i<n;i++){
+        printf("\nEnter the coefficient and exponent of the term..");
+        scanf("%d%d",&a,&b);
+        p1head=insertpoly(p1head,a,b);
+    }
+
+    
+
+    printf("\nEnter the no of terms of polynomial 2..");
+    scanf("%d",&n);
+    printf("\nEnter the polynomial..");
+    for(i=0;i<n;i++){
+        printf("\nEnter the coefficient and exponent of the term..");
+        scanf("%d%d",&a,&b);
+        p2head=insertpoly(p2head,a,b);
+    }
+
+    
+
+    p3head=polyaddition(p1head,p2head);
+
+    
+
+    printf("\nThe polynomial 1 is..");
+    display(p1head);
+    printf("\nThe polynomial 2 is..");
+    display(p2head);
+    printf("\nThe sum of the two polynomials is..");
+    display(p3head);
 }
-void createNodeList(int n)
-{
-    struct node *fnNode, *tmp;
-    int num, i;
- 
-    stnode = (struct node *)malloc(sizeof(struct node));
-    if(stnode == NULL) 
-    {
-        printf(" Memory can not be allocated.");
-    }
-    else
-    {
 
-        printf(" Input data for node 1 : ");
-        scanf("%d", &num);
- 
-        stnode-> num = num;      
-        stnode-> nextptr = NULL; 
-        tmp = stnode;
- 
-        for(i=2; i<=n; i++)
-        {
-            fnNode = (struct node *)malloc(sizeof(struct node));
-            if(fnNode == NULL) 
-            {
-                printf(" Memory can not be allocated.");
-                break;
-            }
-            else
-            {
-                printf(" Input data for node %d : ", i);
-                scanf(" %d", &num);
-                fnNode->num = num;      
-                fnNode->nextptr = NULL; 
-                tmp->nextptr = fnNode; 
-                tmp = tmp->nextptr;
-            }
-        }
-    }
-} 
-void LastNodeDeletion()
+struct node* append(struct node* thead,int c,int e)
 {
-    struct node *toDelLast, *preNode;
-    if(stnode == NULL)
-    {
-        printf(" There is no element in the list.");
+    struct node* newnode = (struct node*)malloc(sizeof(struct node));
+    newnode->coef=c;
+    newnode->expo=e;
+    if(thead==NULL){
+    newnode->next=NULL;
+    return newnode;
     }
-    else
-    {
-        toDelLast = stnode;
-        preNode = stnode;
-       
-        while(toDelLast->nextptr != NULL)
-        {
-            preNode = toDelLast;
-            toDelLast = toDelLast->nextptr;
-        }
-        if(toDelLast == stnode)
-        {
-            stnode = NULL;
-        }
-        else
-        {
-
-            preNode->nextptr = NULL;
-        }
- 
-        free(toDelLast);
-    }
+    struct node* trav=thead;
+    while(trav->next!=NULL) 
+        trav=trav->next;
+    trav->next=newnode;
+    newnode->next=NULL;
+    return thead;
 }
-void displayList()
+
+struct node* insertpoly(struct node* thead,int c,int e)
 {
-    struct node *tmp;
-    if(stnode == NULL)
-    {
-        printf(" No data found in the empty list.");
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->coef=c;
+    newnode->expo=e;
+    if(thead==NULL){            
+        newnode->next=NULL;
+        return newnode;
     }
-    else
-    {
-        tmp = stnode;
-        while(tmp != NULL)
-        {
-            printf(" Data = %d\n", tmp->num);   
-            tmp = tmp->nextptr;                 
+    struct node* prev,* curr;
+    prev=curr=thead;
+    while(curr!=NULL && curr->expo>e){
+        prev=curr;
+        curr=curr->next;
+    }
+    if(curr==thead){            
+        newnode->next=curr;
+        return newnode;
+    }
+    else if(curr==NULL){        
+        prev->next=newnode;
+        newnode->next=NULL;
+    }
+    else{
+        newnode->next=curr;
+        prev->next=newnode;
+    }
+    return thead;
+}
+
+struct node* polyaddition(struct node* p1thead,struct node* p2thead)
+{
+    struct node* ans=NULL;
+    struct node* t1,* t2;
+    t1=p1thead;
+    t2=p2thead;
+    while(t1!=NULL && t2!=NULL){
+        if(t1->expo > t2->expo){
+            ans=append(ans,t1->coef,t1->expo);
+            t1=t1->next;
         }
+        else if(t1->expo < t2->expo){
+            ans=append(ans,t2->coef,t2->expo);
+            t2=t2->next;
+        }
+        else{
+            ans=append(ans,(t1->coef)+(t2->coef),t1->expo);
+            t1=t1->next;
+            t2=t2->next;
+        }
+    }
+
+    while(t1!=NULL){            
+        ans=append(ans,t1->coef,t1->expo);
+        t1=t1->next;
+    }
+
+    while(t2!=NULL){            
+        ans=append(ans,t2->coef,t2->expo);
+        t2=t2->next;
+    }
+    return ans;
+}
+
+void display(struct node* thead)
+{
+    struct node* temp=thead;
+    if(temp==NULL){
+        printf("\nEmpty..");
+    }
+    else{
+        while(temp->next!=NULL){
+            printf(" %dx^%d +",temp->coef,temp->expo);
+            temp=temp->next;
+        }
+       printf(" %dx^%d ",temp->coef,temp->expo);
     }
 }
